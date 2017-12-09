@@ -30,7 +30,7 @@
     <h3>Order details<h2>
     <textarea>details</textarea><br>
     <img src="paypal.jpg" alt="paypal" style="width:200px;height:200px;">
-    <form>
+    <form action="makeOrder.php">
       <input type="text" name="Name" value="Name"><br>
       <input type="text" name="Password" value="Password"><br><br>
       <input type="submit" value="Pay now!"><br>

@@ -30,8 +30,8 @@
         <li>Nice mug for coffee</li>
         <li>Picture of Rhasta, the Shadow Shaman</li>
       </ul>
-      <form>
-      <select name="DropDown">
+      <form action="order.php">
+      <select name="DropDown" >
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
@@ -43,7 +43,7 @@
         <option value="9">9</option>
         <option value="10">10</option>
       </select>
-      <input type="submit" value="Buy now" action="makeOrder.php"><br><br>
+      <input type="submit" value="Buy now"><br><br>
     </form>
     </div>
     <img src="dota2shirt.png" alt="shirt" style="width:300px;height:300px;">
@@ -52,7 +52,7 @@
         <li>Cool shirt for summer holidays</li>
         <li>Show off to those League of legends fan boys</li>
       </ul>
-      <form>
+      <form action="order.php">
       <select name="DropDown">
         <option value="1">1</option>
         <option value="2">2</option>
