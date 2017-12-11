@@ -1,1 +1,3 @@
-<?php require_once("index2.php"); ?>
+<?php 
+
+require_once("index2.php"); ?>

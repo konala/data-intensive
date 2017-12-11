@@ -1,0 +1,10 @@
+My Account/My information
+	/My orders
+
+Debug nappula joka n‰ytt‰‰ kaikki tilaukset koko kannasta
+
+Mit‰ tapahtuu, jos 175 tai 19 on alhaalla. Koko paska kaatuu, jos 180 on alhaalla.
+
+UID, PID, ... current_IDS tauluun.
+
+Ohjelman replikaatio kaikille servereille?

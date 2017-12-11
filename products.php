@@ -6,14 +6,15 @@
    <?php require_once("navi.php"); ?>
   </head>
   <body>
-    
+
     <img src="dota2muki.png" alt="mug" style="width:300px;height:300px;">
     <div>
       <ul>
         <li>Nice mug for coffee</li>
         <li>Picture of Rhasta, the Shadow Shaman</li>
+        <li>Price: 10 €</li>
       </ul>
-      <form action="order.php?product=mug" method="get">
+      <form action="order.php?product=mug" method="post">
       <select name="DropDown" >
         <option value="1">1</option>
         <option value="2">2</option>
@@ -34,8 +35,9 @@
       <ul>
         <li>Cool shirt for summer holidays</li>
         <li>Show off to those League of legends fan boys</li>
+        <li>Price: 20 €</li>
       </ul>
-      <form action="order.php?product=shirt" method="get">
+      <form action="order.php?product=shirt" method="post">
       <select name="DropDown">
         <option value="1">1</option>
         <option value="2">2</option>
