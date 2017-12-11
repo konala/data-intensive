@@ -16,4 +16,13 @@
       <a href="login.php">Log in</a>
     </li>
   </ul>
-</nav>
+  </nav>
+  <?php
+  session_start();
+  if(isset($_SESSION["loggedUser"])) {
+  ?>
+  <div>
+    <p>Logged in as: <?php print $_SESSION["loggedUser"]; ?> </p>
+  </div>
+  <?php } ?>
+
