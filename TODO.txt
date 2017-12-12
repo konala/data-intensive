@@ -1,5 +1,3 @@
-My Account/My information
-	/My orders
 
 Debug nappula joka n‰ytt‰‰ kaikki tilaukset koko kannasta
 

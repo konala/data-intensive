@@ -10,7 +10,7 @@
   <body>
     <div>
       <h2>My Information</h2>
-      <textarea><?php
+      <textarea readonly rows="3" style="width: 300px"><?php
       
        $_GET["p"] = "getAccountInfo";
        require("handler.php");
@@ -20,8 +20,17 @@
     </div>
     <div>
       <h2>My Orders</h2>
-      <textarea><?php 
+      <textarea readonly rows="8" style="width: 300px"><?php 
       $_GET["p"] = "getOrders";
+      db();
+      unset($_GET["p"]);
+      ?>
+      </textarea>
+    </div>
+    <div>
+      <h2>All orders in the system (debug)</h2>
+      <textarea readonly rows="35" style="width: 300px"><?php 
+      $_GET["p"] = "getAllOrders";
       db();
       unset($_GET["p"]);
       ?>

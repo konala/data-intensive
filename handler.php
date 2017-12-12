@@ -30,13 +30,46 @@ function db() {
 		echo "Connection failed: " . $e->getMessage();
 	}
 
+	$returnCode = 0;
 	
 	if($_GET["p"]=="getOrders"){
-		print "getOrders";
+		$region = $_SESSION["loggedRegion"];
+		$stmt = ${"db$region"}->prepare("SELECT orderID, productID, quantity FROM order1 WHERE customerID = :f1");
+		$stmt->bindParam(":f1", $_SESSION["loggedId"]);
+		$stmt->execute();
+		$orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		
+		foreach($orders as $order) {
+			if($order["productID"] == 1) {
+				
+				print "Order Number: " . $order["orderID"] . "\nProduct: mug\nQuantity: " . $order["quantity"] . "\n";
+
+			} else {
+				print "Order Number: " . $order["orderID"] . "\nProduct: shirt\nQuantity: " . $order["quantity"] . "\n";
+
+			}
+			print "\n";
+		}
+		$returnCode = 0;
+	} elseif($_GET["p"]=="getAllOrders") {
+		$printedOrders = Array();
+		foreach ($dbos as $key => $region) {
+	    
+		    $stmt = ${"db$key"}->prepare("SELECT orderID, productID, quantity, customerID FROM order1");
+		    $stmt->execute();
+		    $allOrders  = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		    
+		    foreach($allOrders as $order) {
+		    	
+		    	if(!in_array($order["orderID"], $printedOrders)) {
+			    	array_push($printedOrders, $order["orderID"]);
+			    	print "Order Number: " . $order["orderID"] . "\nCustomer ID: " . $order["customerID"] . "\nProductID: " . $order["productID"] ."\nQuantity: " . $order["quantity"] . "\n\n";
+		    	}
+		    }
+		}
 		$returnCode = 0;
 	} elseif($_GET["p"]=="getAccountInfo") {
-
-		print "getAccountInfo" . "User: " . $_SESSION["loggedUser"];
+		print "User: " . $_SESSION["loggedUser"] . "\nRegion: " . $_SESSION["loggedRegion"] . "\nUser ID: " . $_SESSION["loggedId"];
 		$returnCode = 0;
 	} elseif($_GET["p"]=="register") {
 		/* Find the highest user ID */
@@ -46,8 +79,11 @@ function db() {
 		    $stmt = ${"db$key"}->prepare("SELECT MAX(customerID) AS MaxID FROM customer");
 		    $stmt->execute();
 		    $newMax  = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		    
 		    $i = 1;
-		    print $newMax[0]["MaxID"];
+		    
+		    
+
 		    if($uid < $newMax[0]["MaxID"]) {
 		    	$uid = $newMax[0]["MaxID"];
 		    }
@@ -64,6 +100,7 @@ function db() {
 	   	$returnCode = 1;
  	} elseif($_GET["p"]=="login") {
 		print "login";
+		$userList = Array();
 		foreach ($dbos as $key => $region) {
 	    
 		    $stmt = ${"db$key"}->prepare("SELECT name, customerID, region FROM customer WHERE name = :f1 AND password = :f2");
@@ -71,14 +108,21 @@ function db() {
 			$stmt->bindParam(":f2", $_POST["Password"]);
 		    $stmt->execute();
 		    $userInfo = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		    print_r($userInfo);
+		    array_push($userList, $userInfo);
+		    
+		    
 		    
 		}
-		if(count($userInfo) == 1) {
-			$_SESSION["loggedUser"] = $_POST["Name"];
-			$_SESSION["loggedRegion"] = $userInfo[0]["region"];
-			$_SESSION["loggedId"] = $userInfo[0]["customerID"];
-		} else {
 
+		foreach($userList as $user) {
+			foreach($user as $cred) {
+				if($cred["name"] !== "") {
+					$_SESSION["loggedUser"] = $_POST["Name"];
+					$_SESSION["loggedRegion"] = $cred["region"];
+					$_SESSION["loggedId"] = $cred["customerID"];
+				}
+			}
 		}
 		
 		$returnCode = 1;
