@@ -45,7 +45,7 @@ if ($regId == 1) {
 		print "All servers down!"; # index.php needs to be run from load balancer server! As this cannot currently be reached.
 	}
 # Priority NA, AS, EU
-} elseif ($redId == 2) {
+} elseif ($regId == 2) {
 	if($endPoints[0]["Online"] = "Yes") {
 		header("Location: http://52.164.184.175/index2.php");
 		exit();
