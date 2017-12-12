@@ -15,7 +15,7 @@ if(isset($_GET["p"])) {
 /* Check for required db operation and run it */
 function db() {
 	$dbos = array(
-		"EU" => "localhost",
+		"EU" => "52.169.151.180",
 		"NA" => "52.164.184.175",
 		"AS" => "40.69.220.19"
 	);
@@ -158,34 +158,5 @@ function db() {
 	}
 	
 }
-
-
-
-/*if(!isset($_POST["Name"]) && $_GET["p"]=="register"){
-	print "<p>" . $_POST["region"] . "</p>";
-	
-	$db = new PDO('mysql:host=localhost;dbname=db1;charset=utf8', 'app', 'app');
-	$stmt = $db->prepare("INSERT INTO `customer`(`customerID`,`username`,`region`,`name`,`address`) VALUES (1, :f2, :f3, :f4, :f5)");
-	
-	$stmt->bindParam(":f2", $_POST["Name"]);
-	$stmt->bindParam(":f3", $_POST["region"]);
-	$stmt->bindParam(":f4", $_POST["Name"]);
-	$stmt->bindParam(":f5", $_POST["Password"]);
-	$stmt->execute();
-	
-  } if ($_POST["Name"]=="db2") {
-	  $db = new PDO('mysql:host=52.164.184.175;dbname=db2;charset=utf8', 'app', 'app');
-	  
-	  $stmt = $db->prepare("INSERT INTO `customer`(`customerID`,`username`,`region`,`name`,`address`) VALUES (1, :f2, :f3, :f4, :f5)");
-	  $stmt->bindParam(":f2", $_POST["Name"]);
-		$stmt->bindParam(":f3", $_POST["region"]);
-		$stmt->bindParam(":f4", $_POST["Name"]);
-		$stmt->bindParam(":f5", $_POST["Password"]);
-		$stmt->execute();
-	  
-  }*/
-
-
-
 
 ?>
