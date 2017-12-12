@@ -154,7 +154,7 @@ function db() {
 		print "Error in handler.php\n";
 	}
 	if ($returnCode == 1) {
-		print "<p>Action completed!</p><a href='index.php'>Back to front page!</a>";
+		print "<p>Action completed!</p><a href='index2.php'>Back to front page!</a>";
 	}
 	
 }
