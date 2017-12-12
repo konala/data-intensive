@@ -22,23 +22,29 @@ $endPoints = Array(
 	"Name" => "db3"
 	));
 $port = 80;
+$i = 0;
 foreach($endPoints as $endPoint) {
 	
-	$isOnline = @fsockopen($endPoint["IP"], $port, $errno, $errstr, 4);
-	if($isOnline) {
-		$endPoint["Online"] = "Yes";
+	$isOnline = @fsockopen($endPoint["IP"], $port, $errno, $errstr, 1);
+	if(!$isOnline) {
+		print $errstr;
+	} else {
+		$endPoints[$i]["Online"] = "Yes";
 	}
+	$i++;
+	
 }
-print $regId;
+
+
 # Priority EU, NA, AS
 if ($regId == 1) {
-	if($endPoints[0]["Online"] = "Yes") {
+	if($endPoints[0]["Online"] == "Yes") {
 		header("Location: http://52.169.151.180/index2.php");
 		exit();
-	} elseif($endPoints[1]["Online"] = "Yes"){
+	} elseif($endPoints[1]["Online"] == "Yes"){
 		header("Location: http://52.164.184.175/index2.php"); # NA IP here
 		exit();
-	} elseif($endPoints[2]["Online"] = "Yes"){
+	} elseif($endPoints[2]["Online"] == "Yes"){
 		header("Location: http://40.69.220.19/index2.php"); # AS IP here
 		exit();
 	} else {
@@ -46,13 +52,13 @@ if ($regId == 1) {
 	}
 # Priority NA, AS, EU
 } elseif ($regId == 2) {
-	if($endPoints[0]["Online"] = "Yes") {
+	if($endPoints[0]["Online"] == "Yes") {
 		header("Location: http://52.164.184.175/index2.php");
 		exit();
-	} elseif($endPoints[1]["Online"] = "Yes"){
+	} elseif($endPoints[1]["Online"] == "Yes"){
 		header("Location: http://40.69.220.19/index2.php"); 
 		exit();
-	} elseif($endPoints[2]["Online"] = "Yes"){
+	} elseif($endPoints[2]["Online"] == "Yes"){
 		header("Location: http://52.169.151.180/index2.php"); 
 		exit();
 	} else {
@@ -60,13 +66,13 @@ if ($regId == 1) {
 	}
 # Priority AS, NA, EU
 } else {
-	if($endPoints[0]["Online"] = "Yes") {
+	if($endPoints[0]["Online"] == "Yes") {
 		header("Location: http://40.69.220.19/index2.php");
 		exit();
-	} elseif($endPoints[1]["Online"] = "Yes"){
+	} elseif($endPoints[1]["Online"] == "Yes"){
 		header("Location: http://52.164.184.175/index2.php"); 
 		exit();
-	} elseif($endPoints[2]["Online"] = "Yes"){
+	} elseif($endPoints[2]["Online"] == "Yes"){
 		header("Location: http://52.169.151.180/index2.php"); 
 		exit();
 	} else {

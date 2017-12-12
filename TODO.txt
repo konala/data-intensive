@@ -1,8 +1,6 @@
+UID, PID, ... current_IDS tauluun. Replikoidaan kaikkiin kantoihin tieto viimeisimmistä ID:stä, jotta ei tule duplikaatteja.
 
-Mitä tapahtuu, jos 175 tai 19 on alhaalla. Koko paska kaatuu, jos 180 on alhaalla.
+Mitä tapahtuu eri toiminnoille jos tietty serveri on alhaalla.
 
-UID, PID, ... current_IDS tauluun.
 
-Ohjelman replikaatio kaikille servereille?
 
-header() redirectaa IP:n perusteella tietylle serverille?
