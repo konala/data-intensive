@@ -165,14 +165,15 @@ function register($endPoints) {
 				$stmt->execute();
 				print "<p>#############\nDebug\nQuery executed: " . $stmt->queryString . "\n:f1 = " . $uid . "\n:f2 = " . $_POST["Name"] . "\n:f3 = " . $_POST["Password"] . "\n:f4 = " . $region . "\n#############\n</p>";
 			   	$queryExecuted = 1;
-			   	$stmt2 = $endPoint["conn"]->prepare("UPDATE `idlog` SET `custidmax` = :f1 WHERE id = 1");
-			    $stmt2->bindParam(":f1", $uid);
-			    $stmt2->execute();
+			   	
 			} elseif ($queryExecuted == 0 && $endPoint == end($endPoints)) {
 				$returnCode = 2;
 				finalMessage($returnCode);
 				exit();
 			}
+			$stmt2 = $endPoint["conn"]->prepare("UPDATE `idlog` SET `custidmax` = :f1 WHERE id = 1");
+			$stmt2->bindParam(":f1", $uid);
+			$stmt2->execute();
 		}
 
 		$returnCode = 1;
