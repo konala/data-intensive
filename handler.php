@@ -87,8 +87,21 @@ function db() {
 		    if($uid < $newMax[0]["MaxID"]) {
 		    	$uid = $newMax[0]["MaxID"];
 		    }
+
+		    foreach ($dbos as $key => $region) {
+	    
+		    $stmt = ${"db$key"}->prepare("SELECT `custidmax` AS `MaxID1` FROM `idlog` WHERE id = 1");
+		    $stmt->execute();
+		    $newMax1  = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+		    if($uid < $newMax1[0]["MaxID1"]) {
+		    	$uid = $newMax1[0]["MaxID1"];
+		    }
 		}
-		$uid++;
+
+		}
+				    
+		
 		$region = $_POST["region"];
 		$stmt = ${"db$region"}->prepare("INSERT INTO `customer`(`customerID`,`name`,`password`,`region`) VALUES (:f1, :f2, :f3, :f4)");
 	
@@ -98,6 +111,15 @@ function db() {
 		$stmt->bindParam(":f4", $region);
 		$stmt->execute();
 	   	$returnCode = 1;
+
+	   	foreach ($dbos as $key => $region) {
+	    
+		    $stmt = ${"db$key"}->prepare("UPDATE `idlog` SET `custidmax` = :f1 WHERE id = 1");
+		    
+		    
+		    $stmt->bindParam(":f1", $uid);
+		    $stmt->execute();
+		}
  	} elseif($_GET["p"]=="login") {
 		print "login";
 		$userList = Array();
