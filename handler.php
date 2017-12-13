@@ -149,6 +149,7 @@ function register($endPoints) {
 		}
 		$uid++;	    
 		$region = $_POST["region"];
+		$queryExecuted = 0;
 		foreach($endPoints as $endPoint) {
 			if($endPoint["Region"] == $region && $endPoint["Online"] == "Yes") {
 				
@@ -159,11 +160,11 @@ function register($endPoints) {
 				$stmt->bindParam(":f3", $_POST["Password"]);
 				$stmt->bindParam(":f4", $region);
 				$stmt->execute();
-			   	
+			   	$queryExecuted = 1;
 			   	$stmt2 = $endPoint["conn"]->prepare("UPDATE `idlog` SET `custidmax` = :f1 WHERE id = 1");
 			    $stmt2->bindParam(":f1", $uid);
 			    $stmt2->execute();
-			} else {
+			} elseif ($queryExecuted == 0 && $endPoint == end($endPoints)) {
 				$returnCode = 2;
 				finalMessage($returnCode);
 				exit();

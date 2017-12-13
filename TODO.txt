@@ -1,6 +1,6 @@
-1. UID, PID, ... current_IDS tauluun. Replikoidaan kaikkiin kantoihin tieto viimeisimmistä ID:stä, jotta ei tule duplikaatteja. / Johannes
 
-2. Mitä tapahtuu eri toiminnoille jos tietty serveri on alhaalla. Connection checkki omaan fileensä! / Konsta
+
+
 
 3. Taulujen synkronointi /johannes
 
