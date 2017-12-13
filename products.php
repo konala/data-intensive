@@ -7,8 +7,9 @@
   </head>
   <body>
 
-    <img src="dota2muki.png" alt="mug" style="width:300px;height:300px;">
-    <div>
+    
+    <div style="display: inline-block;">
+      <img src="dota2muki.png" alt="mug" style="width:300px;height:300px;">
       <ul>
         <li>Nice mug for coffee</li>
         <li>Picture of Rhasta, the Shadow Shaman</li>
@@ -32,8 +33,9 @@
     </form><?php } else { ?>
     <p>Register or log in to buy products!</p><?php } ?>
     </div>
-    <img src="dota2shirt.png" alt="shirt" style="width:300px;height:300px;">
-    <div>
+    
+    <div style="display: inline-block;">
+      <img src="dota2shirt.png" alt="shirt" style="width:300px;height:300px;">
       <ul>
         <li>Cool shirt for summer holidays</li>
         <li>Show off to those League of legends fan boys</li>
