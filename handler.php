@@ -98,18 +98,18 @@ function getOrders($endPoints) {
 function getAllOrders($endPoints) {
 	$printedOrders = Array();
 		foreach ($endPoints as $endPoint) {
-	    
-		    $stmt = $endPoint["conn"]->prepare("SELECT orderID, productID, quantity, customerID FROM order1");
-		    $stmt->execute();
-		    $allOrders  = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		    
-		    foreach($allOrders as $order) {
-		    	
-		    	if(!in_array($order["orderID"], $printedOrders)) {
-			    	array_push($printedOrders, $order["orderID"]);
-			    	print "Order Number: " . $order["orderID"] . "\nCustomer ID: " . $order["customerID"] . "\nProductID: " . $order["productID"] ."\nQuantity: " . $order["quantity"] . "\n\n";
-		    	}
-		    }
+	    	if($endPoint["Online"] == "Yes") {
+			    $stmt = $endPoint["conn"]->prepare("SELECT orderID, productID, quantity, customerID FROM order1");
+			    $stmt->execute();
+			    $allOrders  = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			}
+			    foreach($allOrders as $order) {
+			    	
+			    	if(!in_array($order["orderID"], $printedOrders)) {
+				    	array_push($printedOrders, $order["orderID"]);
+				    	print "Order Number: " . $order["orderID"] . "\nCustomer ID: " . $order["customerID"] . "\nProductID: " . $order["productID"] ."\nQuantity: " . $order["quantity"] . "\n\n";
+			    	}
+			    }	
 		}
 
 }
@@ -121,36 +121,37 @@ function register($endPoints) {
 		/* Find the highest user ID */
   		$uid = 0;
 	  	foreach ($endPoints as $endPoint) {
-	    
-		    $stmt = $endPoint["conn"]->prepare("SELECT MAX(customerID) AS MaxID FROM customer");
-		    $stmt->execute();
-		    $newMax  = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		    
-		    $i = 1;
-		    
-		    
+	    	if($endPoint["Online"] == "Yes") {
+			    $stmt = $endPoint["conn"]->prepare("SELECT MAX(customerID) AS MaxID FROM customer");
+			    $stmt->execute();
+			    $newMax  = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			    
+			    $i = 1;
+			    
+			    
 
-		    if($uid < $newMax[0]["MaxID"]) {
-		    	$uid = $newMax[0]["MaxID"];
-		    }
+			    if($uid < $newMax[0]["MaxID"]) {
+			    	$uid = $newMax[0]["MaxID"];
+			    }
 
-		    foreach ($endPoints as $endPoint) {
-	    
-		    $stmt = $endPoint["conn"]->prepare("SELECT `custidmax` AS `MaxID1` FROM `idlog` WHERE id = 1");
-		    $stmt->execute();
-		    $newMax1  = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			    foreach ($endPoints as $endPoint) {
+		    
+				    $stmt = $endPoint["conn"]->prepare("SELECT `custidmax` AS `MaxID1` FROM `idlog` WHERE id = 1");
+				    $stmt->execute();
+				    $newMax1  = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-		    if($uid < $newMax1[0]["MaxID1"]) {
-		    	$uid = $newMax1[0]["MaxID1"];
-		    }
-		}
+				    if($uid < $newMax1[0]["MaxID1"]) {
+				    	$uid = $newMax1[0]["MaxID1"];
+				    }
+				}
+			}
 
 		}
 		$uid++;	    
 		$region = $_POST["region"];
 		foreach($endPoints as $endPoint) {
-			if($endPoint["Region"] == $region) {
-				var_dump($uid);
+			if($endPoint["Region"] == $region && $endPoint["Online"] == "Yes") {
+				
 				$stmt = $endPoint["conn"]->prepare("INSERT INTO customer(customerID, name, password, region) VALUES (:f1, :f2, :f3, :f4)");
 	
 				$stmt->bindParam(":f1", $uid);
@@ -159,14 +160,16 @@ function register($endPoints) {
 				$stmt->bindParam(":f4", $region);
 				$stmt->execute();
 			   	
+			   	$stmt2 = $endPoint["conn"]->prepare("UPDATE `idlog` SET `custidmax` = :f1 WHERE id = 1");
+			    $stmt2->bindParam(":f1", $uid);
+			    $stmt2->execute();
+			} else {
+				$returnCode = 2;
+				finalMessage($returnCode);
+				exit();
 			}
 		}
 
-		foreach($endPoints as $endPoint) {
-			$stmt2 = $endPoint["conn"]->prepare("UPDATE `idlog` SET `custidmax` = :f1 WHERE id = 1");
-		    $stmt2->bindParam(":f1", $uid);
-		    $stmt2->execute();
-		}
 		$returnCode = 1;
 		finalMessage($returnCode);
 }
@@ -174,19 +177,19 @@ function register($endPoints) {
 function login($endPoints) {
 		$userList = Array();
 		foreach ($endPoints as $endPoint) {
-	    
-		    $stmt = $endPoint["conn"]->prepare("SELECT name, customerID, region FROM customer WHERE name = :f1 AND password = :f2");
-		    $stmt->bindParam(":f1", $_POST["Name"]);
-			$stmt->bindParam(":f2", $_POST["Password"]);
-		    $stmt->execute();
-		    $userInfo = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		    
-		    array_push($userList, $userInfo);
-		    
+	    	if($endPoint["Online"] == "Yes") {
+			    $stmt = $endPoint["conn"]->prepare("SELECT name, customerID, region FROM customer WHERE name = :f1 AND password = :f2");
+			    $stmt->bindParam(":f1", $_POST["Name"]);
+				$stmt->bindParam(":f2", $_POST["Password"]);
+			    $stmt->execute();
+			    $userInfo = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			    
+			    array_push($userList, $userInfo);
+			}
 		    
 		    
 		}
-		var_dump($userList);
+		
 		foreach($userList as $user) {
 			foreach($user as $cred) {
 				if($cred["name"] !== "") {
@@ -203,19 +206,19 @@ function login($endPoints) {
 
 function makeOrder($endPoints) {
 	foreach ($endPoints as $endPoint) {
-	    
-	    $stmt = $endPoint["conn"]->prepare("INSERT INTO order1(customerID, productID, quantity) VALUES (:f1, :f2, :f3)");
-	    $stmt->bindParam(":f1", $_SESSION["loggedId"]);
-		if($_POST["product"] == "mug") {
-			$pId = 1;
-			$stmt->bindParam(":f2", $pId);
-		} else {
-			$pId = 2;
-			$stmt->bindParam(":f2", $pId);
-		}
-		$stmt->bindParam(":f3", $_POST["quantity"]);
-	    $stmt->execute();
-	   
+	   	if($endPoint["Online"] == "Yes") { 
+		    $stmt = $endPoint["conn"]->prepare("INSERT INTO order1(customerID, productID, quantity) VALUES (:f1, :f2, :f3)");
+		    $stmt->bindParam(":f1", $_SESSION["loggedId"]);
+			if($_POST["product"] == "mug") {
+				$pId = 1;
+				$stmt->bindParam(":f2", $pId);
+			} else {
+				$pId = 2;
+				$stmt->bindParam(":f2", $pId);
+			}
+			$stmt->bindParam(":f3", $_POST["quantity"]);
+		    $stmt->execute();
+	   }
 	    
 	}
 	$returnCode = 1;
@@ -235,6 +238,9 @@ function handlerError() {
 function finalMessage($returnCode) {
 	if ($returnCode == 1) {
 		print "<p>Action completed!</p><a href='index2.php'>Back to front page!</a>";
+	} elseif ($returnCode == 2) {
+
+		print "DB down, account not added! Try again later. </p><a href='index2.php'>Back to front page!</a>";
 	}
 }
 ?>
