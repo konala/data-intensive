@@ -3,8 +3,10 @@
   <head>
     <meta charset="utf-8">
     <title>DOTA 2 MERCH</title>
- <?php require_once("navi.php");
-    
+ <?php 
+
+ require_once("navi.php");
+
   ?>
   </head>
   <body>

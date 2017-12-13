@@ -1,8 +1,12 @@
-<?php session_start(); ?>
+<?php session_start();
+require_once("continentOverlay.php"); ?>
 <nav>
   <ul>
     <li>
       <a href="index2.php">What's New</a>
+    </li>
+    <li>
+      <a href="sync.php">Sync</a>
     </li>
     <li>
       <a href="products.php">Products</a>

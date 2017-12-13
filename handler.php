@@ -51,7 +51,7 @@ function db() {
 	#var_dump($endPoints);
 	if($_GET["p"]=="getOrders"){
 		getOrders($endPoints);
-	} elseif($_GET["p"]=="getAllOrders") {
+	}elseif($_GET["p"]=="getAllOrders") {
 		getAllOrders($endPoints);
 	} elseif($_GET["p"]=="getAccountInfo") {
 		getAccountInfo();
@@ -65,6 +65,8 @@ function db() {
 		makeOrder($endPoints);
 	} elseif($_GET["p"]=="logout") {
 		logout();
+	} elseif($_GET["p"]=="sync") {
+		sync($endPoints);
 	} else {
 		handlerError();
 	}
@@ -79,6 +81,7 @@ function getOrders($endPoints) {
 	
 	$stmt->bindParam(":f1", $_SESSION["loggedId"]);
 	$stmt->execute();
+	print "#############\nDebug\nQuery executed: " . $stmt->queryString . "\n:f1 = " . $_SESSION["loggedId"] . "\n#############\n";
 	$orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	
 	foreach($orders as $order) {
@@ -160,6 +163,7 @@ function register($endPoints) {
 				$stmt->bindParam(":f3", $_POST["Password"]);
 				$stmt->bindParam(":f4", $region);
 				$stmt->execute();
+				print "<p>#############\nDebug\nQuery executed: " . $stmt->queryString . "\n:f1 = " . $uid . "\n:f2 = " . $_POST["Name"] . "\n:f3 = " . $_POST["Password"] . "\n:f4 = " . $region . "\n#############\n</p>";
 			   	$queryExecuted = 1;
 			   	$stmt2 = $endPoint["conn"]->prepare("UPDATE `idlog` SET `custidmax` = :f1 WHERE id = 1");
 			    $stmt2->bindParam(":f1", $uid);
@@ -226,11 +230,123 @@ function makeOrder($endPoints) {
 	finalMessage($returnCode);
 }
 
+function sync($endPoints) {
+	foreach ($endPoints as $endPoint) {
+	   	if($endPoint["Online"] !== "Yes") { 
+
+	   		print "at least one database down, cannot sync";
+	   		return;
+	   	}
+
+    }
+    $i = 1;
+    foreach ($endPoints as $endPoint) {
+	    	
+			    $stmt = $endPoint["conn"]->prepare("SELECT COUNT(orderID) AS MaxID FROM order1");
+			    $stmt->execute();
+			    $newOrdMax  = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			    if ($i==1){
+			    	$db1max = $newOrdMax[0]["MaxID"];
+			    } else if($i==2) {
+			    	$db2max = $newOrdMax[0]["MaxID"];
+			    } else {
+			    	$db3max = $newOrdMax[0]["MaxID"];
+			    }
+			    $i++;
+			    
+	}
+	if (($db1max !== $db2max) or ($db1max !== $db3max)) {
+
+		if($db1max == max($db1max,$db2max,$db3max)){
+
+			$stmt = $endPoints[1]["conn"]->prepare("DELETE `*` FROM order1");
+			$stmt->execute();
+			$stmt = $endPoints[2]["conn"]->prepare("DELETE `*` FROM order1");
+			$stmt->execute();
+			$stmt = $endPoints[0]["conn"]->prepare("SELECT `*` FROM order1");
+			$stmt->execute();
+			$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			foreach($rows as $row) {
+								
+				$stmt = $endPoints[1]["conn"]->prepare("INSERT INTO order1(`orderID`, `customerID`,`productID`,`quantity`) VALUES (:f1, :f2, :f3, :f4)");
+				$stmt->bindParam(":f1", $row["orderID"]);
+				$stmt->bindParam(":f2", $row["customerID"]);
+				$stmt->bindParam(":f3", $row["productID"]);
+				$stmt->bindParam(":f4", $row["quantity"]);
+				$stmt->execute();
+				$stmt = $endPoints[2]["conn"]->prepare("INSERT INTO order1(`orderID`, `customerID`,`productID`,`quantity`) VALUES (:f1, :f2, :f3, :f4)");
+				$stmt->bindParam(":f1", $row["orderID"]);
+				$stmt->bindParam(":f2", $row["customerID"]);
+				$stmt->bindParam(":f3", $row["productID"]);
+				$stmt->bindParam(":f4", $row["quantity"]);
+				$stmt->execute();
+				
+			}
+			
+
+		}else if($db2max == max($db1max,$db2max,$db3max)){
+
+			$stmt = $endPoints[0]["conn"]->prepare("DELETE `*` FROM order1");
+			$stmt->execute();
+			$stmt = $endPoints[2]["conn"]->prepare("DELETE `*` FROM order1");
+			$stmt->execute();
+			$stmt = $endPoints[1]["conn"]->prepare("SELECT `*` FROM order1");
+			$stmt->execute();
+			$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			foreach($rows as $row) {
+								
+				$stmt = $endPoints[0]["conn"]->prepare("INSERT INTO order1(`orderID`, `customerID`,`productID`,`quantity`) VALUES (:f1, :f2, :f3, :f4)");
+				$stmt->bindParam(":f1", $row["orderID"]);
+				$stmt->bindParam(":f2", $row["customerID"]);
+				$stmt->bindParam(":f3", $row["productID"]);
+				$stmt->bindParam(":f4", $row["quantity"]);
+				$stmt->execute();
+				$stmt = $endPoints[2]["conn"]->prepare("INSERT INTO order1(`orderID`, `customerID`,`productID`,`quantity`) VALUES (:f1, :f2, :f3, :f4)");
+				$stmt->bindParam(":f1", $row["orderID"]);
+				$stmt->bindParam(":f2", $row["customerID"]);
+				$stmt->bindParam(":f3", $row["productID"]);
+				$stmt->bindParam(":f4", $row["quantity"]);
+				$stmt->execute();
+				}
+				
+		}else { 
+
+			$stmt = $endPoints[0]["conn"]->prepare("DELETE `*` FROM order1");
+			$stmt->execute();
+			$stmt = $endPoints[2]["conn"]->prepare("DELETE `*` FROM order1");
+			$stmt->execute();
+			$stmt = $endPoints[2]["conn"]->prepare("SELECT `*` FROM order1");
+			$stmt->execute();
+			$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			foreach($rows as $row) {
+								
+				$stmt = $endPoints[0]["conn"]->prepare("INSERT INTO order1(`orderID`, `customerID`,`productID`,`quantity`) VALUES (:f1, :f2, :f3, :f4)");
+				$stmt->bindParam(":f1", $row["orderID"]);
+				$stmt->bindParam(":f2", $row["customerID"]);
+				$stmt->bindParam(":f3", $row["productID"]);
+				$stmt->bindParam(":f4", $row["quantity"]);
+				$stmt->execute();
+				$stmt = $endPoints[1]["conn"]->prepare("INSERT INTO order1(`orderID`, `customerID`,`productID`,`quantity`) VALUES (:f1, :f2, :f3, :f4)");
+				$stmt->bindParam(":f1", $row["orderID"]);
+				$stmt->bindParam(":f2", $row["customerID"]);
+				$stmt->bindParam(":f3", $row["productID"]);
+				$stmt->bindParam(":f4", $row["quantity"]);
+				$stmt->execute();				
+			}
+			
+		}
+		
+
+	}			    	   	
+	finalMessage(1);
+}
+
 function logout() {
 	unset($_SESSION["loggedUser"]);
 	$returnCode = 1;
 	finalMessage($returnCode);
 }
+
 
 function handlerError() {
 	print "Error in handler.php\n";
@@ -239,6 +355,7 @@ function handlerError() {
 function finalMessage($returnCode) {
 	if ($returnCode == 1) {
 		print "<p>Action completed!</p><a href='index2.php'>Back to front page!</a>";
+
 	} elseif ($returnCode == 2) {
 
 		print "DB down, account not added! Try again later. </p><a href='index2.php'>Back to front page!</a>";
