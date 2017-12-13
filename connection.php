@@ -14,7 +14,7 @@ function checkConnections() {
 		"Name" => "db2"),
 		Array(
 		"Region" => "AS",
-		"IP" => "40.69.220.19",
+		"IP" => "52.169.20.75",
 		"Online" => "No",
 		"Name" => "db3"
 		));

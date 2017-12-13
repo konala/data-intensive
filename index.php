@@ -15,7 +15,7 @@ if ($regId == 1) {
 		header("Location: http://52.164.184.175/index2.php"); # NA IP here
 		exit();
 	} elseif($endPoints[2]["Online"] == "Yes"){
-		header("Location: http://40.69.220.19/index2.php"); # AS IP here
+		header("Location: http://52.169.20.75/index2.php"); # AS IP here
 		print "debug";
 		exit();
 	} else {
@@ -27,7 +27,7 @@ if ($regId == 1) {
 		header("Location: http://52.164.184.175/index2.php");
 		exit();
 	} elseif($endPoints[2]["Online"] == "Yes"){
-		header("Location: http://40.69.220.19/index2.php"); 
+		header("Location: http://52.169.20.75/index2.php"); 
 		exit();
 	} elseif($endPoints[0]["Online"] == "Yes"){
 		header("Location: http://52.169.151.180/index2.php"); 
@@ -38,7 +38,7 @@ if ($regId == 1) {
 # Priority AS, NA, EU
 } else {
 	if($endPoints[2]["Online"] == "Yes") {
-		header("Location: http://40.69.220.19/index2.php");
+		header("Location: http://52.169.20.75/index2.php");
 		exit();
 	} elseif($endPoints[1]["Online"] == "Yes"){
 		header("Location: http://52.164.184.175/index2.php"); 

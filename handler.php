@@ -138,11 +138,11 @@ function register($endPoints) {
 			    }
 
 			    foreach ($endPoints as $endPoint) {
-		    
-				    $stmt = $endPoint["conn"]->prepare("SELECT `custidmax` AS `MaxID1` FROM `idlog` WHERE id = 1");
-				    $stmt->execute();
-				    $newMax1  = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+		    		if($endPoint["Online"] == "Yes") {
+					    $stmt = $endPoint["conn"]->prepare("SELECT `custidmax` AS `MaxID1` FROM `idlog` WHERE id = 1");
+					    $stmt->execute();
+					    $newMax1  = $stmt->fetchAll(PDO::FETCH_ASSOC);
+					}
 				    if($uid < $newMax1[0]["MaxID1"]) {
 				    	$uid = $newMax1[0]["MaxID1"];
 				    }
