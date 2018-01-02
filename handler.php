@@ -173,14 +173,6 @@ function register($endPoints) {
 				finalMessage($returnCode);
 				exit();
 			}
-<<<<<<< HEAD
-=======
-			if($endPoint["Online"] == "Yes") {
-			$stmt2 = $endPoint["conn"]->prepare("UPDATE `idlog` SET `custidmax` = :f1 WHERE id = 1");
-			$stmt2->bindParam(":f1", $uid);
-			$stmt2->execute();
->>>>>>> d1fc329b8041854904a49098722e2418f56c29f5
-		}
 		}
 
 		$returnCode = 1;
