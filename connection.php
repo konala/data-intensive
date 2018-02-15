@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 function checkConnections() {
 	$endPoints = Array(
@@ -21,15 +21,14 @@ function checkConnections() {
 	$port = 80;
 	$i = 0;
 	foreach($endPoints as $endPoint) {
-		
+
 		$isOnline = @fsockopen($endPoint["IP"], $port, $errno, $errstr, 1);
 		if(!$isOnline) {
-			#print $errstr;
 		} else {
 			$endPoints[$i]["Online"] = "Yes";
 		}
 		$i++;
-		
+
 	}
 	return $endPoints;
 }
